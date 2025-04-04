@@ -1,3 +1,5 @@
+
+@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -98,4 +100,28 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.zip-layer {
+  fill-opacity: 0.6;
+  stroke-width: 1;
+  stroke: #fff;
+  transition: fill-opacity 0.2s ease;
+}
+
+.zip-layer:hover {
+  fill-opacity: 0.9;
+  cursor: pointer;
+}
+
+.selected-zip {
+  fill-opacity: 0.9;
+  stroke-width: 2;
+  stroke: #000;
 }
