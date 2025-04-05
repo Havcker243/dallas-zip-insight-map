@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { ZipCodeData, formatCurrency, formatPercentage } from '@/data/dallasZipData';
+import { ZipCodeData, formatCurrency, formatPercentage, getAssistanceFlags } from '@/data/dallasZipData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { Flag } from 'lucide-react';
 
 interface DemographicPanelProps {
   zipData: ZipCodeData | null;
@@ -25,6 +26,7 @@ const DemographicPanel: React.FC<DemographicPanelProps> = ({ zipData }) => {
   }
 
   const { demographics } = zipData;
+  const assistanceFlags = getAssistanceFlags(zipData);
 
   // Demographic sections
   const generalInfo = [
@@ -53,6 +55,34 @@ const DemographicPanel: React.FC<DemographicPanelProps> = ({ zipData }) => {
     { label: 'Median Rent', value: formatCurrency(demographics.housing.medianRent) },
   ];
 
+  const assistanceData = [
+    { label: 'SNAP Benefits', value: formatPercentage(demographics.assistance.snapBenefits) },
+    { label: 'Insured Residents', value: formatPercentage(demographics.assistance.medicalInsurance.insured) },
+  ];
+
+  const insuranceTypeData = [
+    { 
+      label: 'Private', 
+      value: demographics.assistance.medicalInsurance.type.private, 
+      color: 'bg-green-500' 
+    },
+    { 
+      label: 'Medicaid', 
+      value: demographics.assistance.medicalInsurance.type.medicaid, 
+      color: 'bg-blue-500' 
+    },
+    { 
+      label: 'Medicare', 
+      value: demographics.assistance.medicalInsurance.type.medicare, 
+      color: 'bg-purple-500' 
+    },
+    { 
+      label: 'Other', 
+      value: demographics.assistance.medicalInsurance.type.other, 
+      color: 'bg-gray-500' 
+    },
+  ];
+
   return (
     <Card className="h-full overflow-auto">
       <CardHeader className="bg-map-secondary/10 pb-2">
@@ -61,14 +91,46 @@ const DemographicPanel: React.FC<DemographicPanelProps> = ({ zipData }) => {
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4 space-y-6">
+        {/* Assistance Flags */}
+        {(assistanceFlags.financial || assistanceFlags.food || assistanceFlags.medical) && (
+          <div className="bg-red-50 p-3 rounded-md border border-red-200">
+            <h3 className="font-medium text-red-800 text-sm mb-2">Assistance Needed</h3>
+            <div className="space-y-1">
+              {assistanceFlags.financial && (
+                <div className="flex items-center gap-2">
+                  <Flag className="w-4 h-4 text-red-600" fill="#e45c3a" />
+                  <span className="text-xs text-red-800">Financial Assistance</span>
+                </div>
+              )}
+              {assistanceFlags.food && (
+                <div className="flex items-center gap-2">
+                  <Flag className="w-4 h-4 text-orange-600" fill="#ff8c42" />
+                  <span className="text-xs text-red-800">Food Assistance</span>
+                </div>
+              )}
+              {assistanceFlags.medical && (
+                <div className="flex items-center gap-2">
+                  <Flag className="w-4 h-4 text-blue-600" fill="#3b82f6" />
+                  <span className="text-xs text-red-800">Medical Assistance</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* General Information */}
         <div>
           <h3 className="font-medium text-lg mb-2">General Information</h3>
           <div className="grid grid-cols-3 gap-4">
             {generalInfo.map((item, index) => (
-              <div key={index} className="text-center p-3 bg-secondary rounded-md">
+              <div 
+                key={index} 
+                className={`text-center p-3 rounded-md ${index === 2 && demographics.medianIncome < 30000 ? 'bg-red-100' : 'bg-secondary'}`}
+              >
                 <div className="text-muted-foreground text-sm">{item.label}</div>
-                <div className="font-semibold text-lg">{item.value}</div>
+                <div className={`font-semibold text-lg ${index === 2 && demographics.medianIncome < 30000 ? 'text-red-700' : ''}`}>
+                  {item.value}
+                </div>
               </div>
             ))}
           </div>
@@ -79,6 +141,46 @@ const DemographicPanel: React.FC<DemographicPanelProps> = ({ zipData }) => {
           <h3 className="font-medium text-lg mb-2">Race & Ethnicity</h3>
           <div className="space-y-2">
             {raceData.map((item, index) => (
+              <div key={index} className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span>{item.label}</span>
+                  <span>{formatPercentage(item.value)}</span>
+                </div>
+                <Progress value={item.value} className={`h-2 ${item.color}`} />
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Assistance Programs */}
+        <div>
+          <h3 className="font-medium text-lg mb-2">Assistance & Insurance</h3>
+          <div className="grid grid-cols-2 gap-4 mb-3">
+            {assistanceData.map((item, index) => (
+              <div 
+                key={index} 
+                className={`text-center p-3 rounded-md ${
+                  (index === 0 && assistanceFlags.food) || 
+                  (index === 1 && assistanceFlags.medical) 
+                    ? 'bg-red-100' : 'bg-secondary'
+                }`}
+              >
+                <div className="text-muted-foreground text-sm">{item.label}</div>
+                <div className={`font-semibold text-lg ${
+                  (index === 0 && assistanceFlags.food) || 
+                  (index === 1 && assistanceFlags.medical) 
+                    ? 'text-red-700' : ''
+                }`}>
+                  {item.value}
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Insurance Types */}
+          <h4 className="font-medium text-sm mb-2">Insurance Types</h4>
+          <div className="space-y-2">
+            {insuranceTypeData.map((item, index) => (
               <div key={index} className="space-y-1">
                 <div className="flex justify-between text-sm">
                   <span>{item.label}</span>

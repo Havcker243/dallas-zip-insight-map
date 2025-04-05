@@ -67,7 +67,20 @@ export default {
 					primary: '#3B82F6',
 					secondary: '#0EA5E9',
 					highlight: '#F97316',
-					background: '#EFF6FF'
+					background: '#EFF6FF',
+					income: {
+						low: '#e45c3a',
+						mediumLow: '#ff8c42',
+						medium: '#ffe1a8',
+						mediumHigh: '#7ae2a8',
+						high: '#34d27b',
+						veryHigh: '#1e8f4e'
+					},
+					assistance: {
+						financial: '#e45c3a',
+						food: '#ff8c42',
+						medical: '#3b82f6'
+					}
 				}
 			},
 			borderRadius: {
