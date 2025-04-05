@@ -3,41 +3,17 @@ export interface ZipCodeData {
   zipCode: string;
   name: string;
   geometry: GeoJSON.Polygon | GeoJSON.MultiPolygon;
-  demographics: {
-    population: number;
-    medianAge: string; // Changed to string to support ranges like "35-44"
-    medianIncome: number;
-    race: {
-      white: number;
-      black: number;
-      hispanic: number;
-      asian: number;
-      other: number;
-    };
-    education: {
-      highSchool: number;
-      bachelors: number;
-      graduate: number;
-    };
-    housing: {
-      ownedHomes: number;
-      medianHomeValue: number;
-      medianRent: number;
-    };
-    assistance: {
-      snapBenefits: boolean; // Changed to boolean based on "Yes/No" format
-      medicalInsurance: {
-        insured: boolean; // Changed to boolean
-        type: string; // Changed to string for different insurance types like "Medicaid", "CHIP", etc.
-      }
-    }
-  };
+  age: string;
+  ethnicity: string;
+  medical: string;
+  snapBenefits: boolean;
+  income: number;
 }
 
 export interface AssistanceFlags {
   financial: boolean; // Income < $30,000
   food: boolean;      // No SNAP benefits when income is low
-  medical: boolean;   // Uninsured
+  medical: boolean;   // Uninsured or CHIP
 }
 
 // This is simplified mock data based on the provided dataset
@@ -57,35 +33,11 @@ export const dallasZipCodes: ZipCodeData[] = [
         ]
       ]
     },
-    demographics: {
-      population: 15425,
-      medianAge: "35-44",
-      medianIncome: 57850,
-      race: {
-        white: 5,
-        black: 5,
-        hispanic: 85,
-        asian: 3,
-        other: 2
-      },
-      education: {
-        highSchool: 85,
-        bachelors: 35,
-        graduate: 12
-      },
-      housing: {
-        ownedHomes: 28.5,
-        medianHomeValue: 450000,
-        medianRent: 1875
-      },
-      assistance: {
-        snapBenefits: false,
-        medicalInsurance: {
-          insured: true,
-          type: "Medicaid"
-        }
-      }
-    }
+    age: "35-44",
+    ethnicity: "Hispanic",
+    medical: "Medicaid",
+    snapBenefits: false,
+    income: 57850
   },
   {
     zipCode: "75202",
@@ -102,35 +54,11 @@ export const dallasZipCodes: ZipCodeData[] = [
         ]
       ]
     },
-    demographics: {
-      population: 8932,
-      medianAge: "25-34",
-      medianIncome: 81200,
-      race: {
-        white: 10,
-        black: 5,
-        hispanic: 80,
-        asian: 3,
-        other: 2
-      },
-      education: {
-        highSchool: 82,
-        bachelors: 25,
-        graduate: 8
-      },
-      housing: {
-        ownedHomes: 22.3,
-        medianHomeValue: 185000,
-        medianRent: 975
-      },
-      assistance: {
-        snapBenefits: false,
-        medicalInsurance: {
-          insured: true,
-          type: "Other"
-        }
-      }
-    }
+    age: "25-34",
+    ethnicity: "Hispanic",
+    medical: "Other",
+    snapBenefits: false,
+    income: 81200
   },
   {
     zipCode: "75204",
@@ -147,35 +75,11 @@ export const dallasZipCodes: ZipCodeData[] = [
         ]
       ]
     },
-    demographics: {
-      population: 22847,
-      medianAge: "35-44",
-      medianIncome: 22250,
-      race: {
-        white: 10,
-        black: 5,
-        hispanic: 80,
-        asian: 3,
-        other: 2
-      },
-      education: {
-        highSchool: 80,
-        bachelors: 30,
-        graduate: 10
-      },
-      housing: {
-        ownedHomes: 31.7,
-        medianHomeValue: 325000,
-        medianRent: 1500
-      },
-      assistance: {
-        snapBenefits: true,
-        medicalInsurance: {
-          insured: true,
-          type: "Medicaid"
-        }
-      }
-    }
+    age: "35-44",
+    ethnicity: "Hispanic",
+    medical: "Medicaid",
+    snapBenefits: true,
+    income: 22250
   },
   {
     zipCode: "75205",
@@ -192,35 +96,11 @@ export const dallasZipCodes: ZipCodeData[] = [
         ]
       ]
     },
-    demographics: {
-      population: 26542,
-      medianAge: "25-34",
-      medianIncome: 24475,
-      race: {
-        white: 15,
-        black: 5,
-        hispanic: 75,
-        asian: 3,
-        other: 2
-      },
-      education: {
-        highSchool: 85,
-        bachelors: 40,
-        graduate: 20
-      },
-      housing: {
-        ownedHomes: 40.5,
-        medianHomeValue: 550000,
-        medianRent: 1950
-      },
-      assistance: {
-        snapBenefits: false,
-        medicalInsurance: {
-          insured: true,
-          type: "Medicaid"
-        }
-      }
-    }
+    age: "25-34",
+    ethnicity: "Hispanic",
+    medical: "Medicaid",
+    snapBenefits: false,
+    income: 24475
   },
   {
     zipCode: "75207",
@@ -237,35 +117,11 @@ export const dallasZipCodes: ZipCodeData[] = [
         ]
       ]
     },
-    demographics: {
-      population: 5872,
-      medianAge: "25-34",
-      medianIncome: 28184,
-      race: {
-        white: 5,
-        black: 15,
-        hispanic: 75,
-        asian: 3,
-        other: 2
-      },
-      education: {
-        highSchool: 70,
-        bachelors: 20,
-        graduate: 5
-      },
-      housing: {
-        ownedHomes: 20.8,
-        medianHomeValue: 125000,
-        medianRent: 825
-      },
-      assistance: {
-        snapBenefits: false,
-        medicalInsurance: {
-          insured: true,
-          type: "Medicaid"
-        }
-      }
-    }
+    age: "25-34",
+    ethnicity: "Hispanic",
+    medical: "Medicaid",
+    snapBenefits: false,
+    income: 28184
   },
   {
     zipCode: "75208",
@@ -282,35 +138,11 @@ export const dallasZipCodes: ZipCodeData[] = [
         ]
       ]
     },
-    demographics: {
-      population: 32654,
-      medianAge: "25-34",
-      medianIncome: 22250,
-      race: {
-        white: 5,
-        black: 10,
-        hispanic: 80,
-        asian: 3,
-        other: 2
-      },
-      education: {
-        highSchool: 75,
-        bachelors: 25,
-        graduate: 8
-      },
-      housing: {
-        ownedHomes: 40.6,
-        medianHomeValue: 165000,
-        medianRent: 950
-      },
-      assistance: {
-        snapBenefits: true,
-        medicalInsurance: {
-          insured: true,
-          type: "Medicaid"
-        }
-      }
-    }
+    age: "25-34",
+    ethnicity: "Hispanic",
+    medical: "Medicaid",
+    snapBenefits: true,
+    income: 22250
   },
   {
     zipCode: "75209",
@@ -327,35 +159,11 @@ export const dallasZipCodes: ZipCodeData[] = [
         ]
       ]
     },
-    demographics: {
-      population: 18754,
-      medianAge: "18-24",
-      medianIncome: 20767,
-      race: {
-        white: 10,
-        black: 15,
-        hispanic: 70,
-        asian: 3,
-        other: 2
-      },
-      education: {
-        highSchool: 80,
-        bachelors: 30,
-        graduate: 10
-      },
-      housing: {
-        ownedHomes: 35.5,
-        medianHomeValue: 295000,
-        medianRent: 1370
-      },
-      assistance: {
-        snapBenefits: false,
-        medicalInsurance: {
-          insured: true,
-          type: "Medicaid"
-        }
-      }
-    }
+    age: "18-24",
+    ethnicity: "Hispanic",
+    medical: "Medicaid",
+    snapBenefits: false,
+    income: 20767
   },
   {
     zipCode: "75215",
@@ -372,35 +180,11 @@ export const dallasZipCodes: ZipCodeData[] = [
         ]
       ]
     },
-    demographics: {
-      population: 14632,
-      medianAge: "35-44",
-      medianIncome: 35579,
-      race: {
-        white: 5,
-        black: 20,
-        hispanic: 70,
-        asian: 3,
-        other: 2
-      },
-      education: {
-        highSchool: 65,
-        bachelors: 15,
-        graduate: 5
-      },
-      housing: {
-        ownedHomes: 30.4,
-        medianHomeValue: 95000,
-        medianRent: 750
-      },
-      assistance: {
-        snapBenefits: false,
-        medicalInsurance: {
-          insured: false,
-          type: "Uninsured"
-        }
-      }
-    }
+    age: "35-44",
+    ethnicity: "Hispanic",
+    medical: "Uninsured",
+    snapBenefits: false,
+    income: 35579
   }
 ];
 
@@ -423,14 +207,10 @@ export const needsMedicalAssistance = (insuranceType: string): boolean => {
 
 // Get assistance flags for a zip code
 export const getAssistanceFlags = (zipData: ZipCodeData): AssistanceFlags => {
-  const { medianIncome } = zipData.demographics;
-  const snapBenefits = zipData.demographics.assistance.snapBenefits;
-  const insuranceType = zipData.demographics.assistance.medicalInsurance.type;
-  
   return {
-    financial: needsFinancialAssistance(medianIncome),
-    food: needsFoodAssistance(snapBenefits, medianIncome),
-    medical: needsMedicalAssistance(insuranceType)
+    financial: needsFinancialAssistance(zipData.income),
+    food: needsFoodAssistance(zipData.snapBenefits, zipData.income),
+    medical: needsMedicalAssistance(zipData.medical)
   };
 };
 

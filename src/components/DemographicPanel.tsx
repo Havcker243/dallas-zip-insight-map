@@ -1,8 +1,7 @@
 
 import React from 'react';
-import { ZipCodeData, formatCurrency, formatPercentage, getAssistanceFlags } from '@/data/dallasZipData';
+import { ZipCodeData, formatCurrency, getAssistanceFlags } from '@/data/dallasZipData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Flag } from 'lucide-react';
 
 interface DemographicPanelProps {
@@ -25,34 +24,13 @@ const DemographicPanel: React.FC<DemographicPanelProps> = ({ zipData }) => {
     );
   }
 
-  const { demographics } = zipData;
   const assistanceFlags = getAssistanceFlags(zipData);
 
   // Demographic sections
   const generalInfo = [
-    { label: 'Population', value: demographics.population.toLocaleString() },
-    { label: 'Age Range', value: demographics.medianAge },
-    { label: 'Median Income', value: formatCurrency(demographics.medianIncome) },
-  ];
-
-  const raceData = [
-    { label: 'White', value: demographics.race.white, color: 'bg-blue-500' },
-    { label: 'Black', value: demographics.race.black, color: 'bg-purple-500' },
-    { label: 'Hispanic', value: demographics.race.hispanic, color: 'bg-orange-500' },
-    { label: 'Asian', value: demographics.race.asian, color: 'bg-green-500' },
-    { label: 'Other', value: demographics.race.other, color: 'bg-gray-500' },
-  ];
-
-  const educationData = [
-    { label: 'High School', value: demographics.education.highSchool, color: 'bg-blue-300' },
-    { label: 'Bachelor\'s Degree', value: demographics.education.bachelors, color: 'bg-blue-500' },
-    { label: 'Graduate Degree', value: demographics.education.graduate, color: 'bg-blue-700' },
-  ];
-
-  const housingData = [
-    { label: 'Owned Homes', value: formatPercentage(demographics.housing.ownedHomes) },
-    { label: 'Median Home Value', value: formatCurrency(demographics.housing.medianHomeValue) },
-    { label: 'Median Rent', value: formatCurrency(demographics.housing.medianRent) },
+    { label: 'Age Range', value: zipData.age },
+    { label: 'Ethnicity', value: zipData.ethnicity },
+    { label: 'Income', value: formatCurrency(zipData.income) },
   ];
 
   return (
@@ -97,28 +75,12 @@ const DemographicPanel: React.FC<DemographicPanelProps> = ({ zipData }) => {
             {generalInfo.map((item, index) => (
               <div 
                 key={index} 
-                className={`text-center p-3 rounded-md ${index === 2 && demographics.medianIncome < 30000 ? 'bg-red-100' : 'bg-secondary'}`}
+                className={`text-center p-3 rounded-md ${index === 2 && zipData.income < 30000 ? 'bg-red-100' : 'bg-secondary'}`}
               >
                 <div className="text-muted-foreground text-sm">{item.label}</div>
-                <div className={`font-semibold text-lg ${index === 2 && demographics.medianIncome < 30000 ? 'text-red-700' : ''}`}>
+                <div className={`font-semibold text-lg ${index === 2 && zipData.income < 30000 ? 'text-red-700' : ''}`}>
                   {item.value}
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Race Demographics */}
-        <div>
-          <h3 className="font-medium text-lg mb-2">Race & Ethnicity</h3>
-          <div className="space-y-2">
-            {raceData.map((item, index) => (
-              <div key={index} className="space-y-1">
-                <div className="flex justify-between text-sm">
-                  <span>{item.label}</span>
-                  <span>{formatPercentage(item.value)}</span>
-                </div>
-                <Progress value={item.value} className={`h-2 ${item.color}`} />
               </div>
             ))}
           </div>
@@ -131,44 +93,15 @@ const DemographicPanel: React.FC<DemographicPanelProps> = ({ zipData }) => {
             <div className={`text-center p-3 rounded-md ${assistanceFlags.food ? 'bg-red-100' : 'bg-secondary'}`}>
               <div className="text-muted-foreground text-sm">SNAP Benefits</div>
               <div className={`font-semibold text-lg ${assistanceFlags.food ? 'text-red-700' : ''}`}>
-                {demographics.assistance.snapBenefits ? "Yes" : "No"}
+                {zipData.snapBenefits ? "Yes" : "No"}
               </div>
             </div>
             <div className={`text-center p-3 rounded-md ${assistanceFlags.medical ? 'bg-red-100' : 'bg-secondary'}`}>
               <div className="text-muted-foreground text-sm">Insurance Status</div>
               <div className={`font-semibold text-lg ${assistanceFlags.medical ? 'text-red-700' : ''}`}>
-                {demographics.assistance.medicalInsurance.type}
+                {zipData.medical}
               </div>
             </div>
-          </div>
-        </div>
-        
-        {/* Education */}
-        <div>
-          <h3 className="font-medium text-lg mb-2">Education</h3>
-          <div className="space-y-2">
-            {educationData.map((item, index) => (
-              <div key={index} className="space-y-1">
-                <div className="flex justify-between text-sm">
-                  <span>{item.label}</span>
-                  <span>{formatPercentage(item.value)}</span>
-                </div>
-                <Progress value={item.value} className={`h-2 ${item.color}`} />
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        {/* Housing */}
-        <div>
-          <h3 className="font-medium text-lg mb-2">Housing</h3>
-          <div className="grid grid-cols-1 gap-2">
-            {housingData.map((item, index) => (
-              <div key={index} className="flex justify-between p-2 bg-secondary rounded-md">
-                <span className="text-muted-foreground">{item.label}</span>
-                <span className="font-medium">{item.value}</span>
-              </div>
-            ))}
           </div>
         </div>
       </CardContent>

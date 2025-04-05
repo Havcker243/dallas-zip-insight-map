@@ -50,7 +50,7 @@ const DallasMap: React.FC<DallasMapProps> = ({ selectedZip, onZipSelected }) => 
       zip => zip.zipCode === feature.properties.zipCode
     );
     
-    const income = zipData ? zipData.demographics.medianIncome : 0;
+    const income = zipData ? zipData.income : 0;
     const color = getColorByIncome(income);
     
     const isSelected = selectedZip && selectedZip.zipCode === feature.properties.zipCode;
@@ -102,30 +102,33 @@ const DallasMap: React.FC<DallasMapProps> = ({ selectedZip, onZipSelected }) => 
     const centerLat = coordinates.reduce((sum, coord) => sum + coord[1], 0) / coordinates.length;
     const centerLng = coordinates.reduce((sum, coord) => sum + coord[0], 0) / coordinates.length;
     
-    // Add financial assistance flag - Fixed: using numerical offsets
+    // Fixed: Using explicit number typing to avoid TypeScript errors
+    const offsetValue = 0.002;
+    
+    // Add financial assistance flag
     if (flags.financial) {
       markers.push({
-        position: [centerLat - 0.002, centerLng] as [number, number],
+        position: [centerLat - offsetValue, centerLng] as [number, number],
         color: '#e45c3a',
         type: 'Financial',
         zipCode: zip.zipCode
       });
     }
     
-    // Add food assistance flag - Fixed: using numerical offsets
+    // Add food assistance flag
     if (flags.food) {
       markers.push({
-        position: [centerLat, centerLng + 0.002] as [number, number],
+        position: [centerLat, centerLng + offsetValue] as [number, number],
         color: '#ff8c42',
         type: 'Food',
         zipCode: zip.zipCode
       });
     }
     
-    // Add medical assistance flag - Fixed: using numerical offsets
+    // Add medical assistance flag
     if (flags.medical) {
       markers.push({
-        position: [centerLat, centerLng - 0.002] as [number, number],
+        position: [centerLat, centerLng - offsetValue] as [number, number],
         color: '#3b82f6',
         type: 'Medical',
         zipCode: zip.zipCode
