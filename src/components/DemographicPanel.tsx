@@ -31,7 +31,7 @@ const DemographicPanel: React.FC<DemographicPanelProps> = ({ zipData }) => {
   // Demographic sections
   const generalInfo = [
     { label: 'Population', value: demographics.population.toLocaleString() },
-    { label: 'Median Age', value: demographics.medianAge.toFixed(1) },
+    { label: 'Age Range', value: demographics.medianAge },
     { label: 'Median Income', value: formatCurrency(demographics.medianIncome) },
   ];
 
@@ -53,34 +53,6 @@ const DemographicPanel: React.FC<DemographicPanelProps> = ({ zipData }) => {
     { label: 'Owned Homes', value: formatPercentage(demographics.housing.ownedHomes) },
     { label: 'Median Home Value', value: formatCurrency(demographics.housing.medianHomeValue) },
     { label: 'Median Rent', value: formatCurrency(demographics.housing.medianRent) },
-  ];
-
-  const assistanceData = [
-    { label: 'SNAP Benefits', value: formatPercentage(demographics.assistance.snapBenefits) },
-    { label: 'Insured Residents', value: formatPercentage(demographics.assistance.medicalInsurance.insured) },
-  ];
-
-  const insuranceTypeData = [
-    { 
-      label: 'Private', 
-      value: demographics.assistance.medicalInsurance.type.private, 
-      color: 'bg-green-500' 
-    },
-    { 
-      label: 'Medicaid', 
-      value: demographics.assistance.medicalInsurance.type.medicaid, 
-      color: 'bg-blue-500' 
-    },
-    { 
-      label: 'Medicare', 
-      value: demographics.assistance.medicalInsurance.type.medicare, 
-      color: 'bg-purple-500' 
-    },
-    { 
-      label: 'Other', 
-      value: demographics.assistance.medicalInsurance.type.other, 
-      color: 'bg-gray-500' 
-    },
   ];
 
   return (
@@ -152,43 +124,22 @@ const DemographicPanel: React.FC<DemographicPanelProps> = ({ zipData }) => {
           </div>
         </div>
         
-        {/* Assistance Programs */}
+        {/* Assistance & Insurance */}
         <div>
           <h3 className="font-medium text-lg mb-2">Assistance & Insurance</h3>
           <div className="grid grid-cols-2 gap-4 mb-3">
-            {assistanceData.map((item, index) => (
-              <div 
-                key={index} 
-                className={`text-center p-3 rounded-md ${
-                  (index === 0 && assistanceFlags.food) || 
-                  (index === 1 && assistanceFlags.medical) 
-                    ? 'bg-red-100' : 'bg-secondary'
-                }`}
-              >
-                <div className="text-muted-foreground text-sm">{item.label}</div>
-                <div className={`font-semibold text-lg ${
-                  (index === 0 && assistanceFlags.food) || 
-                  (index === 1 && assistanceFlags.medical) 
-                    ? 'text-red-700' : ''
-                }`}>
-                  {item.value}
-                </div>
+            <div className={`text-center p-3 rounded-md ${assistanceFlags.food ? 'bg-red-100' : 'bg-secondary'}`}>
+              <div className="text-muted-foreground text-sm">SNAP Benefits</div>
+              <div className={`font-semibold text-lg ${assistanceFlags.food ? 'text-red-700' : ''}`}>
+                {demographics.assistance.snapBenefits ? "Yes" : "No"}
               </div>
-            ))}
-          </div>
-          
-          {/* Insurance Types */}
-          <h4 className="font-medium text-sm mb-2">Insurance Types</h4>
-          <div className="space-y-2">
-            {insuranceTypeData.map((item, index) => (
-              <div key={index} className="space-y-1">
-                <div className="flex justify-between text-sm">
-                  <span>{item.label}</span>
-                  <span>{formatPercentage(item.value)}</span>
-                </div>
-                <Progress value={item.value} className={`h-2 ${item.color}`} />
+            </div>
+            <div className={`text-center p-3 rounded-md ${assistanceFlags.medical ? 'bg-red-100' : 'bg-secondary'}`}>
+              <div className="text-muted-foreground text-sm">Insurance Status</div>
+              <div className={`font-semibold text-lg ${assistanceFlags.medical ? 'text-red-700' : ''}`}>
+                {demographics.assistance.medicalInsurance.type}
               </div>
-            ))}
+            </div>
           </div>
         </div>
         

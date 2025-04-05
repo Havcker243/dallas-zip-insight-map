@@ -19,9 +19,9 @@ const incomeLegendItems: LegendItem[] = [
 ];
 
 const assistanceFlags = [
-  { color: '#e45c3a', label: 'Financial Assistance Needed', icon: 'flag' },
-  { color: '#ff8c42', label: 'Food Assistance Needed', icon: 'flag' },
-  { color: '#3b82f6', label: 'Medical Assistance Needed', icon: 'flag' },
+  { color: '#e45c3a', label: 'Financial Assistance Needed', icon: 'flag', description: 'Income < $30,000' },
+  { color: '#ff8c42', label: 'Food Assistance Needed', icon: 'flag', description: 'No SNAP benefits in low-income areas' },
+  { color: '#3b82f6', label: 'Medical Assistance Needed', icon: 'flag', description: 'Uninsured or limited coverage' },
 ];
 
 const MapLegend: React.FC = () => {
@@ -55,7 +55,10 @@ const MapLegend: React.FC = () => {
               {assistanceFlags.map((item, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <Flag className="w-4 h-4" fill={item.color} color={item.color} />
-                  <span className="text-xs">{item.label}</span>
+                  <div className="flex flex-col">
+                    <span className="text-xs">{item.label}</span>
+                    <span className="text-[10px] text-gray-500">{item.description}</span>
+                  </div>
                 </div>
               ))}
             </div>

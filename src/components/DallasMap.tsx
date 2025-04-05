@@ -102,7 +102,7 @@ const DallasMap: React.FC<DallasMapProps> = ({ selectedZip, onZipSelected }) => 
     const centerLat = coordinates.reduce((sum, coord) => sum + coord[1], 0) / coordinates.length;
     const centerLng = coordinates.reduce((sum, coord) => sum + coord[0], 0) / coordinates.length;
     
-    // Add financial assistance flag
+    // Add financial assistance flag - Fixed: using numerical offsets
     if (flags.financial) {
       markers.push({
         position: [centerLat - 0.002, centerLng] as [number, number],
@@ -112,7 +112,7 @@ const DallasMap: React.FC<DallasMapProps> = ({ selectedZip, onZipSelected }) => 
       });
     }
     
-    // Add food assistance flag
+    // Add food assistance flag - Fixed: using numerical offsets
     if (flags.food) {
       markers.push({
         position: [centerLat, centerLng + 0.002] as [number, number],
@@ -122,7 +122,7 @@ const DallasMap: React.FC<DallasMapProps> = ({ selectedZip, onZipSelected }) => 
       });
     }
     
-    // Add medical assistance flag
+    // Add medical assistance flag - Fixed: using numerical offsets
     if (flags.medical) {
       markers.push({
         position: [centerLat, centerLng - 0.002] as [number, number],
